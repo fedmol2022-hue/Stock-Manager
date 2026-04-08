@@ -3,6 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Connexion Style</title>
+    
+    <!-- On essaie de charger ton fichier style.css -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- La ligne espionne : elle ne s'active QUE si style.css n'est PAS chargé -->
+    <style>
+        body { background-color: white; color: black; font-family: sans-serif; padding: 20px; }
+        .test-box { border: 2px dashed red; padding: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔍 Test du Visuel</h1>
+        <p>Regarde bien ton écran après avoir enregistré et actualisé :</p>
+        <h2 id="resultat">Si cet écran est BLANC : Le fichier "style.css" est introuvable.</h2>
+        <p>(Vérifie bien que le fichier s'appelle exactement <b>style.css</b> et qu'il est dans le même dossier que ce fichier HTML).</p>
+    </div>
+
+    <!-- On ajoute une règle de secours : si style.css est chargé, il doit changer le fond -->
+    <script>
+        window.onload = function() {
+            // On vérifie si une règle du CSS (comme la couleur du body) a changé
+            var bgColor = window.getComputedStyle(document.body).backgroundColor;
+            console.log("Couleur détectée : " + bgColor);
+        };
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Manager</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
