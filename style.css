@@ -1,0 +1,105 @@
+/*
+  Stock Manager - Stylesheet
+  © 2026 ECREPONT Marc
+*/
+
+/* ── RESET & BASE ── */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: #f4f6f9; font-family: system-ui, sans-serif; }
+body { display: flex; flex-direction: column; max-width: 430px; margin: 0 auto; }
+
+/* ── LAYOUT ── */
+#app { flex: 1; overflow-y: auto; padding-bottom: 75px; }
+#app::-webkit-scrollbar { display: none; }
+.screen { display: none; opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease; }
+.screen.active { display: block; opacity: 1; transform: translateY(0); }
+.screen.slide-out { opacity: 0; transform: translateY(-8px); }
+
+/* ── UI COMPONENTS ── */
+.ph { padding: 20px 16px 10px; }
+.pt { font-size: 26px; font-weight: 800; color: #0d1117; }
+.ps { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.sc { background: #fff; border-radius: 14px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.sl { font-size: 10px; color: #6b7280; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 8px; }
+.sv { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+.sec { font-size: 10px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .8px; padding: 0 16px 7px; }
+.alist { padding: 0 16px; display: flex; flex-direction: column; gap: 7px; }
+.empty { text-align: center; padding: 40px 16px; color: #6b7280; font-size: 13px; }
+.cfm { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: 800; font-size: 15px; cursor: pointer; }
+.cfm.cin { background: #059669; color: #fff; }
+.cfm.cout { background: #dc2626; color: #fff; }
+
+/* ── SCANNER & CAMERA ── */
+.cam-wrap { position: relative; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 1; max-height: 260px; }
+#cam-video { width: 100%; height: 100%; object-fit: cover; }
+.cam-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.cam-frame { width: 65%; aspect-ratio: 1; position: relative; }
+.cam-frame::before, .cam-frame::after, .cbr, .cbl { content: 
+; position: absolute; width: 28px; height: 28px; border-color: #fff; border-style: solid; }
+.cam-frame::before { top: 0; left: 0; border-width: 3px 0 0 3px; border-radius: 4px 0 0 4px; }
+.cam-frame::after { top: 0; right: 0; border-width: 3px 3px 0 0; border-radius: 0 4px 0 0; }
+.cbr { bottom: 0; right: 0; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
+.cbl { bottom: 0; left: 0; border-width: 0 0 3px 3px; border-radius: 0 0 0 4px; }
+.scanline { position: absolute; left: 17.5%; right: 17.5%; height: 2px; background: linear-gradient(90deg,transparent,rgba(29,78,216,.8),transparent); animation: sl 2s ease-in-out infinite; }
+@keyframes sl { 0%,100%{top:17.5%;} 50%{top:82.5%;} }
+.cam-status { position: absolute; top: 10px; left: 0; right: 0; text-align: center; }
+.cbadge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); }
+.cbadge.off { background: rgba(0,0,0,.5); color: rgba(255,255,255,.7); }
+.cam-controls { display: flex; gap: 8px; padding: 0 16px 12px; }
+.cam-btn { flex: 1; padding: 11px; border-radius: 10px; border: 1.5px solid #e5e7eb; background: #fff; cursor: pointer; font-size: 12px; font-weight: 700; color: #0d1117; }
+.cam-btn.primary { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+
+/* ── TOASTS ── */
+.toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-90px); max-width: 380px; width: calc(100% - 32px); background: #0d1117; color: #fff; border-radius: 10px; padding: 13px 16px; font-size: 13px; font-weight: 700; z-index: 1000; transition: transform .3s cubic-bezier(.34,1.56,.64,1); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.ok { background: #059669; }
+.toast.err { background: #dc2626; }
+.toast.inf { background: #1d4ed8; }
+
+/* ── DARK MODE ── */
+[data-theme="dark"] { --bg: #0f1117; --surface: #1a1f2e; --surface2: #232938; --border: #2d3548; --text: #f0f4ff; --text2: #8892aa; --accent: #3b82f6; }
+[data-theme="dark"] body { background: var(--bg) !important; }
+[data-theme="dark"] .sc { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .pt { color: var(--text) !important; }
+[data-theme="dark"] .ps { color: var(--text2) !important; }
+.dark-toggle-track { width: 36px; height: 20px; border-radius: 10px; background: #d1d5db; position: relative; transition: background .3s; flex-shrink: 0; }
+.dark-toggle-track.on { background: #3b82f6; }
+.dark-toggle-thumb { width: 16px; height: 16px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform .3s; }
+.dark-toggle-track.on .dark-toggle-thumb { transform: translateX(16px); }
+
+/* ── MENU & HAMBURGER ── */
+.menu-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px; border-radius: 12px; background: #fff; border: 1.5px solid #f3f4f6; cursor: pointer; font-size: 10px; font-weight: 700; }
+.menu-item.on { border-color: #1d4ed8; background: #eff6ff; color: #1d4ed8; }
+.menu-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+
+/* ── SPLASH SCREEN ── */
+#splash { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(160deg, #0d1117 0%, #1e3a5f 50%, #1d4ed8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity .5s ease; }
+#splash.hide { opacity: 0; pointer-events: none; }
+.splash-bar-wrap { width: 140px; height: 3px; background: rgba(255,255,255,.15); border-radius: 2px; margin-top: 36px; overflow: hidden; }
+.splash-bar { height: 100%; background: #fff; width: 0%; animation: splashProgress 1.8s ease forwards; }
+@keyframes splashProgress { 0%{width:0%;} 100%{width:100%;} }
+
+/* ── AUTHENTIFICATION ── */
+#auth { position: fixed; inset: 0; z-index: 1000; background: linear-gradient(160deg, #0d1117 0%, #1e3a5f 55%, #1d4ed8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; text-align: center; }
+.pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 280px; margin: 0 auto 16px; }
+.pbtn { padding: 20px; border-radius: 14px; border: none; background: rgba(255,255,255,.15); color: #fff; font-size: 24px; font-weight: 700; cursor: pointer; }
+.dots { display: flex; gap: 14px; justify-content: center; margin-bottom: 24px; }
+.dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); }
+.dot.on { background: #fff; border-color: #fff; }
+
+/* ── SCANNER ADD/SCAN SCREENS ── */
+#screen-add, #screen-scan-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f3f4f6; z-index: 1000; overflow-y: auto; padding: 20px; }
+#screen-add .header, #screen-scan-overlay .header { display: flex; align-items: center; margin-bottom: 20px; }
+#screen-add .header button, #screen-scan-overlay .header button { background: none; border: none; font-size: 24px; cursor: pointer; }
+#screen-add .card, #screen-scan-overlay .card { background: #fff; padding: 15px; border-radius: 12px; }
+.photo-upload { width: 100%; height: 150px; border: 1px dashed #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 15px; }
+.btn-register { width: 100%; padding: 15px; background: #22c55e; color: white; border: none; border-radius: 8px; font-weight: bold; }
+
+.custom-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; }
+.custom-modal { background: #fff; padding: 24px; border-radius: 16px; width: 90%; max-width: 320px; text-align: center; }
+.custom-modal h3 { margin-bottom: 16px; }
+.custom-modal .modal-btns { display: flex; flex-direction: column; gap: 12px; }
+.custom-modal button { padding: 14px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+.custom-modal .btn-photo { background: #3b82f6; color: white; }
+.custom-modal .btn-upload { background: #f3f4f6; color: #1f2937; border: 1px solid #d1d5db; }
+.custom-modal .btn-cancel { background: transparent; color: #6b7280; margin-top: 8px; }

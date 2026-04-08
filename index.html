@@ -1,0 +1,413 @@
+<!--
+  ================================================================
+  Stock Manager — Application personnelle de gestion de stock
+  © 2026 ECREPONT Marc (fedmol2022@gmail.com) — Tous droits réservés
+  
+  Application développée à l'initiative et pour le compte
+  exclusif de son propriétaire. Toute reproduction ou utilisation
+  sans autorisation expresse est interdite.
+  ================================================================
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0d1117"/>
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@latest"></script>
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,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<link rel="stylesheet" href="style.css">
+<title>Stock Manager</title>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-logo"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg></div>
+  <div class="splash-title">Stock Manager</div>
+  <div class="splash-sub">Chargement de votre inventaire...</div>
+  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
+  <div class="splash-dots"><div class="splash-dot"></div><div class="splash-dot"></div><div class="splash-dot"></div></div>
+</div>
+
+<div id="auth">
+  <div class="a-logo"><svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2"><path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg></div>
+  <div class="a-title">Stock Manager</div>
+  <div class="a-sub">Identifiez-vous pour continuer</div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:30px;max-width:280px;" id="user-list"></div>
+  <div id="pin-screen" style="display:none;">
+    <div style="color:#fff;margin-bottom:15px;font-size:14px;font-weight:700;" id="pin-user-name"></div>
+    <div class="dots"><div class="dot" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
+    <div class="pgrid">
+      <button class="pbtn" onclick="p('1')">1</button><button class="pbtn" onclick="p('2')">2</button><button class="pbtn" onclick="p('3')">3</button>
+      <button class="pbtn" onclick="p('4')">4</button><button class="pbtn" onclick="p('5')">5</button><button class="pbtn" onclick="p('6')">6</button>
+      <button class="pbtn" onclick="p('7')">7</button><button class="pbtn" onclick="p('8')">8</button><button class="pbtn" onclick="p('9')">9</button>
+      <button class="pbtn" onclick="p('C')" style="background:rgba(220,38,38,.3);">C</button><button class="pbtn" onclick="p('0')">0</button><button class="pbtn" onclick="p('OK')" style="background:rgba(5,150,105,.3);font-size:14px;">OK</button>
+    </div>
+    <button onclick="cancelPin()" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:12px;margin-top:10px;cursor:pointer;">← Retour aux utilisateurs</button>
+  </div>
+</div>
+
+<div id="app">
+    <!-- DASHBOARD -->
+    <div id="s-dash" class="screen active">
+      <div class="ph" style="display:flex;align-items:center;justify-content:space-between;">
+        <div><div class="pt">Dashboard</div><div class="ps" id="ddate">—</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="text-align:right;"><div id="uname" style="font-size:12px;font-weight:800;color:#0d1117;">—</div><div id="stxt" style="font-size:10px;color:#6b7280;display:flex;align-items:center;justify-content:flex-end;gap:4px;"><span id="sdot" style="width:6px;height:6px;border-radius:50%;background:#9ca3af;"></span>En ligne</div></div>
+          <div style="width:36px;height:36px;border-radius:10px;background:#1d4ed8;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;" id="uavatar">?</div>
+        </div>
+      </div>
+      <div id="alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;color:#991b1b;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Alertes Stock Bas</div><div id="alert-list"></div></div>
+      <div id="dlc-alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;">📅 Alertes DLC</div><div id="dlc-alert-list"></div></div>
+      <div class="sg">
+        <div class="sc"><div class="sl">Références</div><div class="sv" id="s-refs">0</div></div>
+        <div class="sc"><div class="sl">En Alerte</div><div class="sv" style="color:#dc2626;" id="s-low">0</div></div>
+        <div class="sc"><div class="sl">Entrées (auj.)</div><div class="sv" style="color:#059669;" id="s-in">0</div></div>
+        <div class="sc"><div class="sl">Sorties (auj.)</div><div class="sv" style="color:#dc2626;" id="s-out">0</div></div>
+      </div>
+      <div class="sec">Activité récente</div><div class="alist" id="act-list"><div class="empty">Aucun mouvement aujourd'hui</div></div>
+    </div>
+
+    <!-- SCANNER -->
+    <div id="s-scan" class="screen">
+      <div class="ph"><div class="pt">Scanner</div><div class="ps">Entrée ou Sortie de stock</div></div>
+      <div class="mode-toggle">
+        <button class="mb in" id="btn-in" onclick="setMode('IN')">📥 Entrée</button>
+        <button class="mb" id="btn-out" onclick="setMode('OUT')">📤 Sortie</button>
+      </div>
+      <div style="padding:0 16px 16px;">
+        <div class="cam-wrap">
+          <video id="cam-video" autoplay playsinline></video><canvas id="cam-canvas"></canvas>
+          <div class="cam-overlay"><div class="cam-frame"><div class="cbr"></div><div class="cbl"></div><div class="scanline"></div></div></div>
+          <div class="cam-status"><div class="cbadge off" id="cam-badge">Caméra inactive</div></div>
+        </div>
+      </div>
+      <div class="cam-controls">
+        <button class="cam-btn primary" id="btn-cam" onclick="toggleCamera()">📷 Activer caméra</button>
+        <button class="cam-btn" onclick="doSearch()">🔍 Manuel</button>
+      </div>
+      <div class="input-row"><input class="si" id="barcode-in" placeholder="Scanner ou taper ID/Nom..." onkeypress="if(event.key==='Enter')doSearch()"/><button class="sok" onclick="doSearch()">OK</button></div>
+      <div class="found-card" id="found-card" style="display:none;">
+        <div style="display:flex;gap:15px;">
+          <div id="scan-photo-placeholder" style="width:70px;height:70px;background:#f3f4f6;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#9ca3af;flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <img id="scan-photo-img" style="width:70px;height:70px;border-radius:10px;object-fit:cover;display:none;flex-shrink:0;"/>
+          <div style="flex:1;min-width:0;"><div class="fn" id="fn">Produit</div><div class="fm" id="fm">ID: — · Stock: —</div></div>
+        </div>
+        <div class="fg" style="margin-top:14px;">
+          <div><span class="fl">Quantité</span><div class="qty-row"><button class="qb" onclick="dq()">-</button><input class="qi" id="qty" type="number" value="1" oninput="updLbl()"/><button class="qb" onclick="iq()">+</button></div></div>
+          <div><span class="fl">Zone</span><select class="fi" id="zone"><option value="A">Zone A</option><option value="B">Zone B</option><option value="C">Zone C</option><option value="D">Zone D</option></select></div>
+        </div>
+        <div style="margin-top:8px;">
+          <span class="fl">Fournisseur</span>
+          <select class="fi" id="supp" onchange="checkOtherSupp(this)">
+            <option value="">-- Choisir --</option>
+            <option value="Colruyt">Colruyt</option>
+            <option value="Aldi">Aldi</option>
+            <option value="Lidl">Lidl</option>
+            <option value="Makro">Makro</option>
+            <option value="Autre">Autre...</option>
+          </select>
+          <input class="fi" id="supp-other" placeholder="Nom du nouveau fournisseur..." style="display:none;margin-top:4px;"/>
+        </div>
+        <div><span class="fl" id="txt-note">Note</span><input class="fi" id="note" placeholder="Commentaire..."/></div>
+        <div id="dlc-field" style="display:none;margin-top:8px;">
+          <span class="fl">📅 Date limite de consommation (DLC)</span>
+          <input type="date" id="dlc-input" class="fi" style="width:100%;"/>
+        </div>
+
+        <button class="cfm cin" id="cfmbtn" onclick="confirmMvt()">✓ <span id="cfmlbl">Confirmer Entrée</span></button>
+      </div>
+      <div style="margin-top:6px;"><div class="sec">Derniers scans</div><div class="alist" id="scan-hist"><div class="empty">Aucun scan récent</div></div></div>
+    </div>
+
+    <!-- STOCK -->
+    <div id="s-stock" class="screen">
+      <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div><div class="pt" id="ph-title-stock">Inventaire</div><div class="ps" id="stock-ct">—</div></div>
+        <div style="display:flex;gap:7px;margin-top:4px;">
+          <button onclick="syncProductsFromSheets()" id="btn-sync-products" style="background:#f0fdf4;color:#059669;border:1.5px solid #bbf7d0;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+            <svg id="sync-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            Sync
+          </button>
+          <button onclick="showAddProduct()" style="background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;">+ Nouveau</button>
+        </div>
+      </div>
+      <div class="sw"><div class="sico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <input class="sf" id="srsearch" placeholder="Nom, code, référence..." oninput="renderStock()"/></div>
+      <div class="fscroll" id="cat-filters"></div>
+      <div class="pl" id="plist"></div>
+    </div>
+
+    <!-- EXPORT -->
+    <div id="s-exp" class="screen">
+      <div class="ph"><div class="pt" id="ph-title-exp">Export</div><div class="ps" id="ph-sub-exp">CSV compatible Excel</div></div>
+      <div style="padding:0 16px;display:flex;flex-direction:column;gap:9px;">
+        <button class="ec" onclick="exportStock()"><div style="display:flex;align-items:center;gap:13px;"><div class="eico" style="background:#dbeafe;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round"><path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/></svg></div><div><div class="et" id="txt-stock-state">État du Stock</div><div class="ed" id="exp-s">— références</div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/></svg></button>
+        <button class="ec" onclick="exportHist('IN')"><div style="display:flex;align-items:center;gap:13px;"><div class="eico" style="background:#d1fae5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 19 19 12"/></svg></div><div><div class="et" id="txt-hist-in">Historique Entrées</div><div class="ed" id="exp-i">0 mouvements</div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/></svg></button>
+      <button class="ec" onclick="generatePDF()">
+        <div style="display:flex;align-items:center;gap:13px;">
+          <div class="eico" style="background:#fef2f2;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div><div class="et" id="txt-pdf">Rapport PDF complet</div><div class="ed" id="txt-pdf-sub">Stock · Alertes · DLC · Mouvements</div></div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button class="ec" onclick="exportBackup()"><div style="display:flex;align-items:center;gap:13px;"><div class="eico" style="background:#ede9fe;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div class="et" id="txt-backup">Backup complet JSON</div><div class="ed" id="txt-backup-sub">Produits + tous les mouvements</div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/></svg></button>
+      <button class="ec" onclick="triggerImportBackup()" style="border-color:#f59e0b;"><div style="display:flex;align-items:center;gap:13px;"><div class="eico" style="background:#fef3c7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><div class="et" style="color:#92400e;">Restaurer depuis backup JSON</div><div class="ed">Importer un fichier backup</div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3" transform="rotate(180 12 12)"/></svg></button>
+      <input type="file" id="import-backup-input" accept=".json" style="display:none;" onchange="handleImportBackup(this)"/>
+      <button class="ec" onclick="exportHist('OUT')"><div style="display:flex;align-items:center;gap:13px;"><div class="eico" style="background:#fee2e2;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 5 5 12"/></svg></div><div><div class="et" id="txt-hist-out">Historique Sorties</div><div class="ed" id="exp-o">0 mouvements</div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3"/></svg></button>
+      </div>
+      <div style="margin-top:12px;"><div class="sec" id="txt-session-log">Journal de session</div><div class="alist" id="exp-hist"><div class="empty" id="txt-no-movement">Aucun mouvement</div></div></div>
+    </div>
+
+    <!-- HISTORIQUE -->
+    <div id="s-hist" class="screen">
+      <div class="ph"><div class="pt" id="ph-title-hist">Historique</div><div class="ps" id="ph-sub-hist">Tous les mouvements</div></div>
+      <div style="padding:0 16px 12px;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <select id="hist-filter-type" onchange="renderHist()" style="flex:1;padding:9px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;background:#fff;">
+            <option value="all">Tous types</option>
+            <option value="IN">Entrées uniquement</option>
+            <option value="OUT">Sorties uniquement</option>
+          </select>
+          <select id="hist-filter-op" onchange="renderHist()" style="flex:1;padding:9px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:13px;background:#fff;">
+            <option value="all">Tous opérateurs</option>
+          </select>
+        </div>
+        <div id="hist-list" class="alist"></div>
+      </div>
+    </div>
+
+    <!-- COMMANDES -->
+    <div id="s-orders" class="screen">
+      <div class="ph" style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div><div class="pt">Commandes</div><div class="ps" id="orders-ct">0 en attente</div></div>
+        <button onclick="showNewOrder()" style="background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;">+ Créer</button>
+      </div>
+      <div class="fscroll" style="padding-bottom:14px;">
+        <button class="fc on" id="ord-tab-pending" onclick="showOrdersTab('pending')">En attente</button>
+        <button class="fc" id="ord-tab-done" onclick="showOrdersTab('done')">Terminées</button>
+      </div>
+      <div id="orders-list" class="alist"></div>
+    </div>
+
+    <!-- INVENTAIRE -->
+    <div id="s-inventory" class="screen">
+      <div class="ph"><div class="pt">Inventaire</div><div class="ps">Vérification physique du stock</div></div>
+      <div id="inv-start-screen" style="padding:0 16px;">
+        <div class="sc" style="margin-bottom:16px;">
+          <div class="sl">Nouvelle session</div>
+          <p style="font-size:12px;color:#6b7280;margin-bottom:12px;">Choisissez une catégorie pour commencer l'inventaire.</p>
+          <select id="inv-cat-select" class="fi" style="margin-bottom:14px;"></select>
+          <button class="cfm cin" onclick="startInventory()">Démarrer l'inventaire</button>
+        </div>
+      </div>
+      <div id="inv-active-screen" style="display:none;padding:0 16px;">
+        <div class="sc" style="margin-bottom:16px;border-top:3px solid #9333ea;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div class="sl" id="inv-active-cat">Catégorie: —</div>
+            <div id="inv-progress" style="font-size:11px;font-weight:700;color:#9333ea;">0 / 0</div>
+          </div>
+          <div id="inv-item-card" style="text-align:center;padding:10px 0;">
+            <div id="inv-item-name" style="font-size:18px;font-weight:800;margin-bottom:4px;">Nom du produit</div>
+            <div id="inv-item-info" style="font-size:12px;color:#6b7280;margin-bottom:16px;">Stock théorique: 0</div>
+            <div class="qty-row" style="justify-content:center;margin-bottom:20px;">
+              <button class="qb" onclick="dqInv()">-</button>
+              <input class="qi" id="inv-qty" type="number" value="0"/>
+              <button class="qb" onclick="iqInv()">+</button>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="cam-btn" style="flex:1;" onclick="prevInv()">Précédent</button>
+              <button class="cam-btn primary" style="flex:2;background:#9333ea;border-color:#9333ea;" id="inv-next-btn" onclick="nextInv()">Suivant</button>
+            </div>
+          </div>
+        </div>
+        <button onclick="cancelInventory()" style="width:100%;background:none;border:none;color:#dc2626;font-size:12px;font-weight:700;cursor:pointer;">Annuler l'inventaire</button>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="s-admin" class="screen">
+      <div class="ph"><div class="pt">Administration</div><div class="ps">Configuration et maintenance</div></div>
+      <div style="padding:0 16px 20px;display:flex;flex-direction:column;gap:14px;">
+        <div class="sc">
+          <div class="sl">Google Sheets</div>
+          <div style="margin-bottom:10px;"><label class="fl">Sheet ID</label><input class="fi" id="admin-sheet-id" placeholder="ID de la feuille..."/></div>
+          <div style="margin-bottom:10px;"><label class="fl">Clé API</label><input class="fi" id="admin-api-key" type="password" placeholder="Clé API Google..."/></div>
+          <div><label class="fl">URL Script GAS</label><input class="fi" id="admin-script-url" placeholder="https://script.google.com/..."/></div>
+        </div>
+        <div class="sc">
+          <div class="sl">Personnalisation</div>
+          <div style="margin-bottom:10px;"><label class="fl">Nom de l'App</label><input class="fi" id="admin-app-name" placeholder="Stock Manager..."/></div>
+          <div style="margin-bottom:10px;"><label class="fl">Sous-titre</label><input class="fi" id="admin-app-subtitle" placeholder="Gestion de stock..."/></div>
+          <div style="margin-bottom:10px;"><label class="fl">Logo URL</label><input class="fi" id="admin-logo-url" placeholder="https://..."/></div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div style="flex:1;"><label class="fl">Couleur principale</label><input type="color" id="admin-primary-color" style="width:100%;height:38px;border:none;border-radius:8px;background:none;cursor:pointer;"/></div>
+            <div style="flex:1;text-align:center;"><div id="admin-color-preview" style="font-size:10px;font-weight:700;margin-top:14px;">#1d4ed8</div></div>
+          </div>
+        </div>
+        <div class="sc">
+          <div class="sl">Préférences</div>
+          <div style="margin-bottom:10px;"><label class="fl">Langue</label><select class="fi" id="admin-lang"><option value="fr">Français</option><option value="en">English</option><option value="nl">Nederlands</option></select></div>
+          <div><label class="fl">Email rapports</label><input class="fi" id="admin-report-email" type="email" placeholder="email@exemple.com"/></div>
+          <div style="display:flex;gap:10px;margin-top:10px;">
+            <div style="flex:1;"><label class="fl">Rapport Hebdo</label><select class="fi" id="admin-report-weekly"><option value="off">Désactivé</option><option value="on">Activé</option></select></div>
+            <div style="flex:1;"><label class="fl">Rapport Mensuel</label><select class="fi" id="admin-report-monthly"><option value="off">Désactivé</option><option value="on">Activé</option></select></div>
+          </div>
+        </div>
+        <button class="cfm cin" onclick="saveAdminConfig()">Enregistrer la configuration</button>
+        <button class="cfm" style="background:#f3f4f6;color:#374151;" onclick="logout()">Se déconnecter</button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="s-about" class="screen">
+      <div class="ph"><div class="pt">À propos</div><div class="ps">Stock Manager v2.4.0</div></div>
+      <div style="padding:0 16px;">
+        <div class="sc" style="text-align:center;padding:30px 20px;">
+          <div style="width:80px;height:80px;background:#eff6ff;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#1d4ed8;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg></div>
+          <div style="font-size:20px;font-weight:800;color:#0d1117;margin-bottom:6px;">Stock Manager</div>
+          <div style="font-size:13px;color:#6b7280;margin-bottom:24px;line-height:1.5;">Solution complète de gestion de stock avec synchronisation Google Sheets, scanner intégré et rapports PDF.</div>
+          <div style="border-top:1px solid #f3f4f6;padding-top:20px;text-align:left;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-size:12px;color:#6b7280;">Version</span><span style="font-size:12px;font-weight:700;">2.4.0 (Avril 2026)</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-size:12px;color:#6b7280;">Développeur</span><span style="font-size:12px;font-weight:700;">Marc ECREPONT</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-size:12px;color:#6b7280;">Licence</span><span style="font-size:12px;font-weight:700;">Propriétaire</span></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:20px;font-size:11px;color:#9ca3af;padding-bottom:30px;">© 2026 ECREPONT Marc · Tous droits réservés</div>
+      </div>
+    </div>
+</div>
+
+<div id="hamburger-bar" style="position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid #f3f4f6;padding:10px 16px 25px;display:flex;align-items:center;justify-content:space-between;z-index:500;">
+  <div style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="toggleMenu()">
+    <div id="current-screen-icon" style="width:38px;height:38px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;">Menu</div>
+      <div id="current-screen-name" style="font-size:14px;font-weight:800;color:#0d1117;">Dashboard</div>
+    </div>
+  </div>
+  <button onclick="toggleMenu()" style="width:42px;height:42px;border-radius:12px;border:none;background:#f3f4f6;color:#374151;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</div>
+
+<div id="menu-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;backdrop-filter:blur(4px);" onclick="toggleMenu()"></div>
+<div id="slide-menu" style="position:fixed;bottom:-100%;left:0;right:0;background:#fff;border-radius:24px 24px 0 0;z-index:900;transition:bottom .3s cubic-bezier(.32,1,.23,1);max-height:85vh;overflow-y:auto;padding-bottom:40px;">
+  <div style="width:40px;height:5px;background:#e5e7eb;border-radius:3px;margin:12px auto 20px;"></div>
+  <div style="padding:0 24px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid #f3f4f6;margin-bottom:15px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div id="menu-user-avatar" style="width:44px;height:44px;border-radius:14px;background:#1d4ed8;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;">?</div>
+      <div><div id="menu-user-name" style="font-size:16px;font-weight:800;color:#0d1117;">Utilisateur</div><div style="font-size:12px;color:#6b7280;">Session active</div></div>
+    </div>
+    <button onclick="toggleDarkMode()" id="dark-toggle">
+      <div class="dark-toggle-track" id="dark-track"><div class="dark-toggle-thumb"></div></div>
+      <span id="dark-label" style="font-size:16px;">🌙</span>
+    </button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px;">
+    <div class="menu-item on" id="tb-dash" onclick="goMenu('dash')"><div class="menu-icon" style="background:#eff6ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><span>Dashboard</span></div>
+    <div class="menu-item" id="tb-scan" onclick="goMenu('scan')"><div class="menu-icon" style="background:#f0fdf4;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><path d="M21 16h-3v3m0-3v3m-3-6h3m3 0h-3"/></svg></div><span>Scanner</span></div>
+    <div class="menu-item" id="tb-stock" onclick="goMenu('stock')"><div class="menu-icon" style="background:#fefce8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2"><path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg></div><span>Stock</span></div>
+    <div class="menu-item" id="tb-orders" onclick="goMenu('orders')"><div class="menu-icon" style="background:#fef3c7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></div><span>Commandes</span></div>
+    <div class="menu-item" id="tb-hist" onclick="goMenu('hist')"><div class="menu-icon" style="background:#f0f9ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span>Historique</span></div>
+    <div class="menu-item" id="tb-inventory" onclick="goMenu('inventory')"><div class="menu-icon" style="background:#fdf4ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></div><span>Inventaire</span></div>
+    <div class="menu-item" id="tb-exp" onclick="goMenu('exp')"><div class="menu-icon" style="background:#fff1f2;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm0 2l4 4h-4V4z"/></svg></div><span>Export</span></div>
+    <div class="menu-item" id="tb-admin" onclick="goMenu('admin')"><div class="menu-icon" style="background:#f0f9ff;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z"/></svg></div><span>Admin</span></div>
+    <div class="menu-item" id="tb-about" onclick="goMenu('about')"><div class="menu-icon" style="background:#f8fafc;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span>À propos</span></div>
+  </div>
+</div>
+
+<div id="toast" class="toast">Message</div>
+
+<!-- Écran d'ajout de produit -->
+<div id="screen-add" class="screen">
+  <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center;">
+      <button onclick="window.closeAddScreen()" style="background: none; border: none; font-size: 24px; cursor: pointer;">←</button>
+      <h2 style="margin-left: 15px;">Nouveau Produit</h2>
+    </div>
+    <button onclick="window.closeAddScreen()" style="background: #ef4444; color: white; border: none; border-radius: 8px; padding: 5px 12px; font-weight: bold; cursor: pointer;">QUITTER</button>
+  </div>
+
+  <div class="card">
+    <div class="photo-upload" onclick="document.getElementById('img-input').click()">
+      <span id="img-placeholder">📷 Ajouter une photo</span>
+      <img id="product-img" style="display:none; width:100%; height:100%; object-fit:cover;">
+      <input type="file" id="img-input" hidden accept="image/*">
+    </div>
+
+    <label>ID Produit (Automatique si vide)</label>
+    <input type="text" id="p-id" placeholder="Ex: PROD-001" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px;">
+
+    <input type="hidden" id="p-sku">
+
+    <label>Nom du produit</label>
+    <input type="text" id="p-name" placeholder="Nom du produit" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px;">
+
+    <label>Catégorie</label>
+    <select id="p-category" onchange="handleSelectChange(this, 'catégorie')" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px; background: white;">
+      <option value="">-- Choisir une catégorie --</option>
+    </select>
+
+    <label>Fournisseur</label>
+    <select id="p-supplier" onchange="handleSelectChange(this, 'fournisseur')" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px; background: white;">
+      <option value="">-- Choisir un fournisseur --</option>
+    </select>
+
+    <div style="display: flex; gap: 10px;">
+      <div style="flex: 1;">
+        <label>Quantité initiale</label>
+        <input type="number" id="p-qty" value="0" min="0" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px;">
+      </div>
+      <div style="flex: 1;">
+        <label>Zone de stock</label>
+        <select id="p-zone" onchange="handleSelectChange(this, 'zone')" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px; background: white;">
+          <option value="">-- Zone --</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-register" onclick="saveNewProduct()">ENREGISTRER LE PRODUIT</button>
+  </div>
+</div>
+
+<div id="screen-scan-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f3f4f6; z-index:9999; padding:20px; overflow-y:auto; color:#1f2937;">
+    <div class="header" style="display: flex; align-items: center; margin-bottom: 20px;">
+        <button onclick="window.closeScanScreen()" style="background: none; border: none; font-size: 24px; cursor: pointer;">← Retour</button>
+        <h2 style="margin-left: 15px;">Scanner un produit</h2>
+    </div>
+    
+    <div class="card" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div class="camera-container" style="width: 100%; height: 250px; background: black; border-radius: 8px; margin-bottom: 15px; overflow: hidden; position: relative;">
+            <video id="video-scan" style="width: 100%; height: 100%; object-fit: cover;"></video>
+            <div class="camera-overlay" style="position: absolute; top: 20%; left: 15%; width: 70%; height: 60%; border: 2px solid #3b82f6; border-radius: 8px; box-shadow: 0 0 0 1000px rgba(0,0,0,0.5);"></div>
+        </div>
+        
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Code-barres détecté :</label>
+        <input type="text" id="p-sku-scan" placeholder="En attente de lecture..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px; font-size: 18px;">
+        
+        <button class="btn-camera" onclick="window.startScanner('video-scan', 'p-sku-scan')" style="width: 100%; padding: 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer;">ACTIVER LA CAMÉRA</button>
+        <button class="btn-close" onclick="window.closeScanScreen()" style="width: 100%; padding: 10px; background: none; border: 1px solid #ccc; color: #1f2937; cursor: pointer; border-radius: 8px;">Fermer</button>
+    </div>
+</div>
+
+<!-- Modale de choix photo personnalisée -->
+<div id="photo-choice-modal" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <h3>Nouveau Produit</h3>
+    <div class="modal-btns">
+      <button class="btn-photo" onclick="window.handlePhotoChoice('camera')">📷 Prendre une photo</button>
+      <button class="btn-upload" onclick="window.handlePhotoChoice('upload')">📁 Importer une image</button>
+      <button class="btn-cancel" onclick="window.closePhotoModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
