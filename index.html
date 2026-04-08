@@ -4,349 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Stock Manager</title>
-    
-    <!-- LIEN VERS TON STYLE (LE LOOK) -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Bibliothèques pour le scanner et les graphiques -->
     <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Métadonnées PWA et icônes -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1d4ed8">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
 
-    <!-- ÉCRAN DE CHARGEMENT (SPLASH ) -->
     <div id="splash">
-        <div class="splash-logo">
-            <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5">
-                <path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/>
-            </svg>
-        </div>
         <div class="splash-title">Stock Manager</div>
         <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
     </div>
 
-    <!-- ÉCRAN DE CONNEXION (AUTH) -->
     <div id="auth">
-        <div class="a-logo">
-            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2">
-                <path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/>
-            </svg>
-        </div>
+        <div class="a-logo">Logo</div>
         <h1 class="a-title">Bienvenue</h1>
-        <p class="a-sub">Sélectionnez votre opérateur et entrez votre PIN.</p>
+        <p id="pin-subtitle" class="a-sub">Sélectionnez votre opérateur et entrez votre PIN.</p>
         
-        <div class="dots">
-            <div class="dot" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div>
+        <div class="pin-dots">
+            <div id="d0" class="dot"></div>
+            <div id="d1" class="dot"></div>
+            <div id="d2" class="dot"></div>
+            <div id="d3" class="dot"></div>
         </div>
 
-        <div class="pgrid">
-            <button class="pbtn" onclick="p(\'1\')">1</button><button class="pbtn" onclick="p(\'2\')')">2</button><button class="pbtn" onclick="p(\'3\')">3</button>
-            <button class="pbtn" onclick="p(\'4\')">4</button><button class="pbtn" onclick="p(\'5\')">5</button><button class="pbtn" onclick="p(\'6\')">6</button>
-            <button class="pbtn" onclick="p(\'7\')">7</button><button class="pbtn" onclick="p(\'8\')">8</button><button class="pbtn" onclick="p(\'9\')">9</button>
-            <button class="pbtn" onclick="p(\'C\')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><path d="M18 9l-6 6"/><path d="M12 9l6 6"/></svg></button>
-            <button class="pbtn" onclick="p(\'0\' )">0</button>
-            <button class="pbtn" onclick="p(\'OK\')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
+        <div class="pin-pad">
+            <button class="pbtn" onclick="p('1' )">1</button>
+            <button class="pbtn" onclick="p('2')">2</button>
+            <button class="pbtn" onclick="p('3')">3</button>
+            <button class="pbtn" onclick="p('4')">4</button>
+            <button class="pbtn" onclick="p('5')">5</button>
+            <button class="pbtn" onclick="p('6')">6</button>
+            <button class="pbtn" onclick="p('7')">7</button>
+            <button class="pbtn" onclick="p('8')">8</button>
+            <button class="pbtn" onclick="p('9')">9</button>
+            <button class="pbtn" onclick="p('C')">C</button>
+            <button class="pbtn" onclick="p('0')">0</button>
+            <button class="pbtn" onclick="p('OK')">OK</button>
         </div>
         
         <div style="display:flex; justify-content:center; margin-top:20px;">
-            <select id="operator-select" style="background: rgba(255,255,255,0.1 ); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; width: 200px;" onchange="selectOperator(this.value)">
+            <select id="operator-select" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; width: 200px;" onchange="selectOperator(this.value)">
                 <option value="">Chargement...</option>
             </select>
         </div>
     </div>
 
-    <!-- L\"APPLICATION PRINCIPALE -->
     <div id="app" style="display:none;">
-        <div id="toast" class="toast"></div>
-
-        <!-- DASHBOARD -->
-        <div id="s-dash" class="screen active">
-            <div class="ph" style="display:flex;align-items:center;justify-content:space-between;">
-                <div><div class="pt">Dashboard</div><div class="ps" id="ddate">—</div></div>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="text-align:right;"><div id="uname" style="font-size:12px;font-weight:800;color:#0d1117;">—</div><div id="stxt" style="font-size:10px;color:#6b7280;display:flex;align-items:center;justify-content:flex-end;gap:4px;"><span id="sdot" style="width:6px;height:6px;border-radius:50%;background:#9ca3af;"></span>En ligne</div></div>
-                    <div style="width:36px;height:36px;border-radius:10px;background:#1d4ed8;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;" id="uavatar">?</div>
-                </div>
-            </div>
-            <div id="alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;color:#991b1b;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Alertes Stock Bas</div><div id="alert-list"></div></div>
-            <div id="dlc-alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;">📅 Alertes DLC</div><div id="dlc-alert-list"></div></div>
-            <div class="sg">
-                <div class="sc"><div class="sl">Références</div><div class="sv" id="s-refs">0</div></div>
-                <div class="sc"><div class="sl">En Alerte</div><div class="sv" style="color:#dc2626;" id="s-low">0</div></div>
-                <div class="sc"><div class="sl">Entrées (auj.)</div><div class="sv" style="color:#059669;" id="s-in">0</div></div>
-                <div class="sc"><div class="sl">Sorties (auj.)</div><div class="sv" style="color:#dc2626;" id="s-out">0</div></div>
-            </div>
-            <div class="sec">Activité récente</div><div class="alist" id="act-list"><div class="empty">Aucun mouvement aujourd\"hui</div></div>
-        </div>
-
-        <!-- SCANNER -->
-        <div id="s-scan" class="screen">
-            <div class="ph"><div class="pt">Scanner</div><div class="ps">Entrée ou Sortie de stock</div></div>
-            <div class="mode-toggle">
-                <button class="mb in" id="btn-in" onclick="setMode(\'IN\')">📥 Entrée</button>
-                <button class="mb" id="btn-out" onclick="setMode(\'OUT\')">📤 Sortie</button>
-            </div>
-            <div style="padding:0 16px 16px;">
-                <div class="cam-wrap">
-                    <video id="cam-video" autoplay playsinline></video><canvas id="cam-canvas"></canvas>
-                    <div class="cam-overlay"><div class="cam-frame"><div class="cbr"></div><div class="cbl"></div><div class="scanline"></div></div></div>
-                    <div class="cam-status"><div class="cbadge off" id="cam-badge">Caméra inactive</div></div>
-                </div>
-            </div>
-            <div class="cam-controls">
-                <button class="cam-btn primary" id="btn-cam" onclick="toggleCamera()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" x2="17" y1="12" y2="12"/></svg> Activer Scanner</button>
-                <button class="cam-btn" onclick="stopCamera( )"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square"><rect width="18" height="18" x="3" y="3" rx="2"/></svg> Arrêter</button>
-            </div>
-            <div class="input-row">
-                <input type="text" id="p-sku" class="si" placeholder="Code produit ou SKU" onkeyup="if(event.keyCode===13 ) findProduct()">
-                <button class="sok" onclick="findProduct()">OK</button>
-            </div>
-            <div id="found-product-card" class="found-card" style="display:none;">
-                <p class="fn" id="fp-name"></p>
-                <p class="fm" id="fp-meta"></p>
-                <div class="fg">
-                    <div><span class="fl">Stock Actuel</span><span class="fi" id="fp-stock"></span></div>
-                    <div><span class="fl">Dernier Mvt</span><span class="fi" id="fp-last-mvt"></span></div>
-                </div>
-                <div class="qty-row">
-                    <button class="qb" onclick="changeQty(-1)">-</button>
-                    <input type="number" id="mvt-qty" class="qi" value="1">
-                    <button class="qb" onclick="changeQty(1)">+</button>
-                </div>
-                <button class="cfm cin" onclick="confirmMvt(\'in\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Entrée</button>
-                <button class="cfm cout" onclick="confirmMvt(\'out\' )"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-minus-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg> Sortie</button>
-            </div>
-        </div>
-
-        <!-- Screen: Stock -->
-        <div id="s-stock" class="screen">
-            <div class="ph">
-                <h1 class="pt">Inventaire</h1>
-                <p class="ps">Liste complète des produits en stock.</p>
-            </div>
-            <div class="sw">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search sico"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="stock-search" class="sf" placeholder="Rechercher un produit..." onkeyup="filterStock( )">
-            </div>
-            <div class="fscroll" id="stock-categories">
-                <button class="fc on" onclick="filterCategory(\'all\')">Tout</button>
-            </div>
-            <div class="pl" id="stock-list">
-                <div class="empty">Aucun produit trouvé.</div>
-            </div>
-        </div>
-
-        <!-- Screen: History -->
-        <div id="s-hist" class="screen">
-            <div class="ph">
-                <h1 class="pt">Historique</h1>
-                <p class="ps">Tous les mouvements de stock enregistrés.</p>
-            </div>
-            <div class="sw">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search sico"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="text" id="hist-search" class="sf" placeholder="Rechercher un mouvement..." onkeyup="filterHistory( )">
-            </div>
-            <div class="fscroll" id="hist-filters">
-                <button class="fc on" onclick="filterHistoryType(\'all\')">Tout</button>
-                <button class="fc" onclick="filterHistoryType(\'in\')">Entrées</button>
-                <button class="fc" onclick="filterHistoryType(\'out\')">Sorties</button>
-            </div>
-            <div class="pl" id="hist-list">
-                <div class="empty">Aucun mouvement enregistré.</div>
-            </div>
-        </div>
-
-        <!-- Screen: Export -->
-        <div id="s-exp" class="screen">
-            <div class="ph">
-                <h1 class="pt">Export</h1>
-                <p class="ps">Exporter les données ou générer des rapports.</p>
-            </div>
-            <div class="alist">
-                <button class="ec" onclick="exportCSV(\'stock\')">
-                    <div class="eico" style="background:#e0f2fe;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></div>
-                    <div><p class="et">Exporter le Stock (CSV )</p><p class="ed">Télécharger la liste actuelle des produits.</p></div>
-                </button>
-                <button class="ec" onclick="exportCSV(\'history\')">
-                    <div class="eico" style="background:#e0f2fe;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v6h4"/></svg></div>
-                    <div><p class="et">Exporter l\"Historique (CSV )</p><p class="ed">Télécharger tous les mouvements de stock.</p></div>
-                </button>
-                <button class="ec" onclick="generatePDFReport()">
-                    <div class="eico" style="background:#fee2e2;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-bar-chart"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 18v-1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1v1"/><path d="M12 12v6"/><path d="M10 16v2"/><path d="M14 14v4"/></svg></div>
-                    <div><p class="et">Rapport PDF</p><p class="ed">Générer un rapport PDF de l\"inventaire.</p></div>
-                </button>
-            </div>
-        </div>
-
-        <!-- Screen: Admin -->
-        <div id="s-admin" class="screen">
-            <div class="ph">
-                <h1 class="pt">Administration</h1>
-                <p class="ps">Gérer les paramètres de l\"application.</p>
-            </div>
-            <div class="alist">
-                <button class="ec" onclick="openAddScreen( )">
-                    <div class="eico" style="background:#dcfce7;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-plus"><path d="M16 16h2"/><path d="M18 14v4"/><path d="M7.5 7.5 12 12l-4.5 4.5L3 12l4.5-4.5Z"/><path d="M5 12H2"/><path d="M12 2v2"/><path d="M12 12v2"/><path d="M12 22v-2"/><path d="M17.5 16.5 22 12l-4.5-4.5L13 12l4.5 4.5Z"/></svg></div>
-                    <div><p class="et">Ajouter un Produit</p><p class="ed">Enregistrer un nouveau produit dans l\"inventaire.</p></div>
-                </button>
-                <button class="ec" onclick="toggleDarkMode( )">
-                    <div class="eico" style="background:#e0e7ff;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
-                    <div><p class="et">Mode Sombre</p><p class="ed">Activer ou désactiver le thème sombre.</p></div>
-                    <div id="dark-track" class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div>
-                </button>
-                <button class="ec" onclick="logout( )">
-                    <div class="eico" style="background:#ffe4e6;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></div>
-                    <div><p class="et">Déconnexion</p><p class="ed">Se déconnecter de l\"application.</p></div>
-                </button>
-            </div>
-        </div>
-
-        <!-- Screen: About -->
-        <div id="s-about" class="screen">
-            <div class="ph">
-                <h1 class="pt">À propos</h1>
-                <p class="ps">Informations sur l\"application.</p>
-            </div>
-            <div class="sc">
-                <p class="sl">Version</p>
-                <p class="sv">1.0.0</p>
-            </div>
-            <div class="sc" style="margin-top:14px;">
-                <p class="sl">Développeur</p>
-                <p class="sv">Marc ECREPONT</p>
-            </div>
-            <div class="sc" style="margin-top:14px;">
-                <p class="sl">Contact</p>
-                <p class="sv">fedmol2022@gmail.com</p>
-            </div>
-        </div>
-
-        <!-- Screen: Add Product Overlay -->
-        <div id="screen-add" class="screen-overlay">
-            <div class="header">
-                <button onclick="closeAddScreen( )"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-                <h2>Ajouter un Produit</h2>
-            </div>
-            <div class="card">
-                <input type="text" id="add-sku" placeholder="SKU / Code-barres" />
-                <input type="text" id="add-name" placeholder="Nom du produit" />
-                <input type="text" id="add-category" placeholder="Catégorie" />
-                <input type="number" id="add-stock" placeholder="Stock initial" value="0" />
-                <input type="date" id="add-dlc" placeholder="Date Limite de Consommation (DLC )" />
-                <div class="photo-upload" onclick="promptPhotoChoice()">
-                    <span>Ajouter une photo</span>
-                    <input type="file" id="img-input" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
-                </div>
-                <button class="btn-register" onclick="registerProduct()">Enregistrer Produit</button>
-            </div>
-        </div>
-
-        <!-- Screen: Scan Overlay -->
-        <div id="screen-scan-overlay" class="screen-overlay">
-            <div class="header">
-                <button onclick="closeScanScreen()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-                <h2>Scanner un Produit</h2>
-            </div>
-            <div class="cam-wrap">
-                <video id="video-scan" class="cam-video" playsinline></video>
-                <div class="cam-overlay">
-                    <div class="cam-frame">
-                        <div class="scanline"></div>
-                        <div class="cbr"></div><div class="cbl"></div>
-                    </div>
-                </div>
-                <div class="cam-status"><span class="cbadge off" id="cam-scan-status-badge">Caméra désactivée</span></div>
-            </div>
-            <div class="cam-controls">
-                <button class="cam-btn primary" onclick="startScanner(\'video-scan\', \'add-sku\' )"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucude-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" x2="17" y1="12" y2="12"/></svg> Activer Scanner</button>
-                <button class="cam-btn" onclick="stopScanner( )"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square"><rect width="18" height="18" x="3" y="3" rx="2"/></svg> Arrêter</button>
-            </div>
-        </div>
-
-        <!-- Photo Choice Modal -->
-        <div id="photo-choice-modal" class="custom-modal-overlay">
-            <div class="custom-modal">
-                <h3>Choisir la source</h3>
-                <div class="modal-btns">
-                    <button class="btn-photo" onclick="handlePhotoChoice(\'camera\' )">Prendre une photo</button>
-                    <button class="btn-upload" onclick="handlePhotoChoice(\'gallery\')">Choisir depuis la galerie</button>
-                    <button class="btn-cancel" onclick="closePhotoModal()">Annuler</button>
-                </div>
-            </div>
-        </div>
-
+        <div id="s-dash" class="screen active"><h1>Dashboard</h1><p>Refs: <span id="s-refs">0</span></p></div>
+        <div id="s-scan" class="screen"><h1>Scanner</h1></div>
+        <div id="s-stock" class="screen"><h1>Stock</h1></div>
+        <div id="s-hist" class="screen"><h1>Historique</h1></div>
     </div>
 
-    <!-- BARRE DE NAVIGATION (TABBAR) -->
-    <div id="tabbar">
-        <button class="menu-item" id="tb-dash" onclick="go(\'dash\')">
-            <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
-            <span>Dash</span>
-        </button>
-        <button class="menu-item" id="tb-scan" onclick="go(\'scan\' )">
-            <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></svg></div>
-            <span>Scan</span>
-        </button>
-        <button class="menu-item" id="tb-stock" onclick="go(\'stock\' )">
-            <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-boxes"><path d="M2.97 12.93A2 2 0 0 0 2 14v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-.97-1.07"/><path d="M20 14V8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v6"/><path d="M10 10h4"/><path d="M12 2v4"/></svg></div>
-            <span>Stock</span>
-        </button>
-        <button class="menu-item" id="tb-hist" onclick="go(\'hist\' )">
-            <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v6h4"/></svg></div>
-            <span>Hist</span>
-        </button>
-        <button class="menu-item" id="tb-menu" onclick="toggleMenu( )">
-            <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg></div>
-            <span>Menu</span>
-        </button>
+    <div id="tabbar" style="display:none; position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; background:#1e293b; padding:10px 0;">
+        <button onclick="go('dash')">Dash</button>
+        <button onclick="go('scan')">Scan</button>
+        <button onclick="go('stock')">Stock</button>
+        <button onclick="go('hist')">Hist</button>
     </div>
 
-    <div id="slide-menu" style="bottom:-100%;">
-        <div class="nav-header">
-            <p class="nav-title">Stock Manager</p>
-            <p class="nav-user" id="current-operator-name">Opérateur: Non connecté</p>
-        </div>
-        <div class="nav-items">
-            <button class="nav-item" onclick="goMenu(\'dash\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                <span>Dashboard</span>
-            </button>
-            <button class="nav-item" onclick="goMenu(\'scan\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></svg>
-                <span>Scanner</span>
-            </button>
-            <button class="nav-item" onclick="goMenu(\'stock\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-boxes"><path d="M2.97 12.93A2 2 0 0 0 2 14v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-.97-1.07"/><path d="M20 14V8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v6"/><path d="M10 10h4"/><path d="M12 2v4"/></svg>
-                <span>Inventaire</span>
-            </button>
-            <button class="nav-item" onclick="goMenu(\'hist\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v6h4"/></svg>
-                <span>Historique</span>
-            </button>
-            <div class="nav-separator"></div>
-            <button class="nav-item" onclick="goMenu(\'exp\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                <span>Export</span>
-            </button>
-            <button class="nav-item" onclick="goMenu(\'admin\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.78 1.35a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.44a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.78 1.35a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.78-1.35a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.44a2 2 0 0 1 1-1.73l.15-.08a2 2 0 0 0 .73-2.73l-.78-1.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                <span>Admin</span>
-            </button>
-            <button class="nav-item" onclick="goMenu(\'about\' )">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                <span>À propos</span>
-            </button>
-        </div>
-    </div>
-    <div id="menu-overlay" onclick="toggleMenu( )"></div>
+    <div id="toast" class="toast"></div>
 
-    <!-- LIEN VERS TON CERVEAU (LE JAVASCRIPT) -->
     <script src="script.js"></script>
-
 </body>
 </html>
