@@ -2,128 +2,101 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Connexion Style</title>
-    
-    <!-- On essaie de charger ton fichier style.css -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- La ligne espionne : elle ne s'active QUE si style.css n'est PAS chargé -->
-    <style>
-        body { background-color: white; color: black; font-family: sans-serif; padding: 20px; }
-        .test-box { border: 2px dashed red; padding: 20px; text-align: center; }
-    </style>
-</head>
-<body>
-    <div class="test-box">
-        <h1>🔍 Test du Visuel</h1>
-        <p>Regarde bien ton écran après avoir enregistré et actualisé :</p>
-        <h2 id="resultat">Si cet écran est BLANC : Le fichier "style.css" est introuvable.</h2>
-        <p>(Vérifie bien que le fichier s'appelle exactement <b>style.css</b> et qu'il est dans le même dossier que ce fichier HTML).</p>
-    </div>
-
-    <!-- On ajoute une règle de secours : si style.css est chargé, il doit changer le fond -->
-    <script>
-        window.onload = function() {
-            // On vérifie si une règle du CSS (comme la couleur du body) a changé
-            var bgColor = window.getComputedStyle(document.body).backgroundColor;
-            console.log("Couleur détectée : " + bgColor);
-        };
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Stock Manager</title>
+    
+    <!-- LIEN VERS TON STYLE (LE LOOK) -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Bibliothèques pour le scanner et les graphiques -->
+    <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Métadonnées PWA et icônes -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1d4ed8">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+    <!-- ÉCRAN DE CHARGEMENT (SPLASH) -->
     <div id="splash">
-        <img src="icons/icon-512x512.png" alt="Logo" width="120">
+        <div class="splash-logo">
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5">
+                <path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/>
+            </svg>
+        </div>
+        <div class="splash-title">Stock Manager</div>
         <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
     </div>
 
+    <!-- ÉCRAN DE CONNEXION (AUTH) -->
     <div id="auth">
-        <img src="icons/icon-512x512.png" alt="Logo" width="120">
+        <div class="a-logo">
+            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2">
+                <path d="M21 8l-9-5L3 8v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/>
+            </svg>
+        </div>
         <h1 class="a-title">Bienvenue</h1>
-        <p class="a-sub">Sélectionnez votre opérateur et entrez votre PIN.</p>
+        <p class="a-sub">Entrez votre code PIN pour continuer.</p>
+        
         <div class="dots" id="pin-dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
+
         <div class="pgrid">
-            <button class="pbtn" onclick="enterPin(1)">1</button>
-            <button class="pbtn" onclick="enterPin(2)">2</button>
-            <button class="pbtn" onclick="enterPin(3)">3</button>
-            <button class="pbtn" onclick="enterPin(4)">4</button>
-            <button class="pbtn" onclick="enterPin(5)">5</button>
-            <button class="pbtn" onclick="enterPin(6)">6</button>
-            <button class="pbtn" onclick="enterPin(7)">7</button>
-            <button class="pbtn" onclick="enterPin(8)">8</button>
-            <button class="pbtn" onclick="enterPin(9)">9</button>
-            <button class="pbtn" onclick="clearPin()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-delete"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><path d="M18 9l-6 6"/><path d="M12 9l6 6"/></svg></button>
-            <button class="pbtn" onclick="enterPin(0)">0</button>
-            <button class="pbtn" onclick="confirmPin()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg></button>
+            <button class="pbtn" onclick="p(\'1\')">1</button><button class="pbtn" onclick="p(\'2\')">2</button><button class="pbtn" onclick="p(\'3\')">3</button>
+            <button class="pbtn" onclick="p(\'4\')">4</button><button class="pbtn" onclick="p(\'5\')">5</button><button class="pbtn" onclick="p(\'6\')">6</button>
+            <button class="pbtn" onclick="p(\'7\')">7</button><button class="pbtn" onclick="p(\'8\')">8</button><button class="pbtn" onclick="p(\'9\')">9</button>
+            <button class="pbtn" onclick="p(\'C\')" style="background:rgba(220,38,38,.3);">C</button>
+            <button class="pbtn" onclick="p(\'0\')">0</button>
+            <button class="pbtn" onclick="p(\'OK\')" style="background:rgba(5,150,105,.3);">OK</button>
         </div>
-        <select id="operator-select" onchange="selectOperator(this.value)"></select>
+        
+        <div id="user-list" style="margin-top:20px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+            <!-- La liste des utilisateurs s\'affichera ici via script.js -->
+        </div>
     </div>
 
-    <div id="app">
-        <div id="toast" class="toast"></div>
-
-        <!-- Screen: Dashboard -->
+    <!-- L\'APPLICATION PRINCIPALE -->
+    <div id="app" style="display:none;">
+        <!-- DASHBOARD -->
         <div id="s-dash" class="screen active">
-            <div class="ph">
-                <h1 class="pt">Dashboard</h1>
-                <p class="ps">Vue d'ensemble de votre stock.</p>
+            <div class="ph" style="display:flex;align-items:center;justify-content:space-between;">
+                <div><div class="pt">Dashboard</div><div class="ps" id="ddate">—</div></div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="text-align:right;"><div id="uname" style="font-size:12px;font-weight:800;color:#0d1117;">—</div><div id="stxt" style="font-size:10px;color:#6b7280;display:flex;align-items:center;justify-content:flex-end;gap:4px;"><span id="sdot" style="width:6px;height:6px;border-radius:50%;background:#9ca3af;"></span>En ligne</div></div>
+                    <div style="width:36px;height:36px;border-radius:10px;background:#1d4ed8;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;" id="uavatar">?</div>
+                </div>
             </div>
+            <div id="alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;color:#991b1b;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Alertes Stock Bas</div><div id="alert-list"></div></div>
+            <div id="dlc-alert-banner" style="display:none;margin:0 16px 14px;padding:12px 16px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:12px;color:#9a3412;font-size:12px;"><div style="font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px;">📅 Alertes DLC</div><div id="dlc-alert-list"></div></div>
             <div class="sg">
-                <div class="sc">
-                    <p class="sl">Produits Actifs</p>
-                    <p class="sv" id="dash-active-products">0</p>
-                </div>
-                <div class="sc">
-                    <p class="sl">Stock Total</p>
-                    <p class="sv" id="dash-total-stock">0</p>
-                </div>
+                <div class="sc"><div class="sl">Références</div><div class="sv" id="s-refs">0</div></div>
+                <div class="sc"><div class="sl">En Alerte</div><div class="sv" style="color:#dc2626;" id="s-low">0</div></div>
+                <div class="sc"><div class="sl">Entrées (auj.)</div><div class="sv" style="color:#059669;" id="s-in">0</div></div>
+                <div class="sc"><div class="sl">Sorties (auj.)</div><div class="sv" style="color:#dc2626;" id="s-out">0</div></div>
             </div>
-            <p class="sec">Alertes</p>
-            <div class="alist" id="dash-alerts">
-                <div class="empty">Aucune alerte pour le moment.</div>
-            </div>
-            <p class="sec">Mouvements Récents</p>
-            <div class="alist" id="dash-recent-movements">
-                <div class="empty">Aucun mouvement récent.</div>
-            </div>
+            <div class="sec">Activité récente</div><div class="alist" id="act-list"><div class="empty">Aucun mouvement aujourd\'hui</div></div>
         </div>
 
-        <!-- Screen: Scan -->
+        <!-- SCANNER -->
         <div id="s-scan" class="screen">
-            <div class="ph">
-                <h1 class="pt">Scanner</h1>
-                <p class="ps">Scannez un produit pour ajouter/retirer du stock.</p>
+            <div class="ph"><div class="pt">Scanner</div><div class="ps">Entrée ou Sortie de stock</div></div>
+            <div class="mode-toggle">
+                <button class="mb in" id="btn-in" onclick="setMode(\'IN\')">📥 Entrée</button>
+                <button class="mb" id="btn-out" onclick="setMode(\'OUT\')">📤 Sortie</button>
             </div>
-            <div class="cam-wrap">
-                <video id="video" class="cam-video" playsinline></video>
-                <div class="cam-overlay">
-                    <div class="cam-frame">
-                        <div class="scanline"></div>
-                        <div class="cbr"></div><div class="cbl"></div>
-                    </div>
+            <div style="padding:0 16px 16px;">
+                <div class="cam-wrap">
+                    <video id="cam-video" autoplay playsinline></video><canvas id="cam-canvas"></canvas>
+                    <div class="cam-overlay"><div class="cam-frame"><div class="cbr"></div><div class="cbl"></div><div class="scanline"></div></div></div>
+                    <div class="cam-status"><div class="cbadge off" id="cam-badge">Caméra inactive</div></div>
                 </div>
-                <div class="cam-status"><span class="cbadge off" id="cam-status-badge">Caméra désactivée</span></div>
             </div>
             <div class="cam-controls">
-                <button class="cam-btn primary" onclick="startScanner(\'video\', \'p-sku\')"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" x2="17" y1="12" y2="12"/></svg> Activer Scanner</button>
-                <button class="cam-btn" onclick="stopScanner()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square"><rect width="18" height="18" x="3" y="3" rx="2"/></svg> Arrêter</button>
+                <button class="cam-btn primary" id="btn-cam" onclick="toggleCamera()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scan-line"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" x2="17" y1="12" y2="12"/></svg> Activer Scanner</button>
+                <button class="cam-btn" onclick="stopCamera()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square"><rect width="18" height="18" x="3" y="3" rx="2"/></svg> Arrêter</button>
             </div>
             <div class="input-row">
                 <input type="text" id="p-sku" class="si" placeholder="Code produit ou SKU" onkeyup="if(event.keyCode===13) findProduct()">
@@ -197,11 +170,11 @@
                 </button>
                 <button class="ec" onclick="exportCSV(\'history\')">
                     <div class="eico" style="background:#e0f2fe;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v6h4"/></svg></div>
-                    <div><p class="et">Exporter l'Historique (CSV)</p><p class="ed">Télécharger tous les mouvements de stock.</p></div>
+                    <div><p class="et">Exporter l\'Historique (CSV)</p><p class="ed">Télécharger tous les mouvements de stock.</p></div>
                 </button>
                 <button class="ec" onclick="generatePDFReport()">
                     <div class="eico" style="background:#fee2e2;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-bar-chart"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 18v-1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1v1"/><path d="M12 12v6"/><path d="M10 16v2"/><path d="M14 14v4"/></svg></div>
-                    <div><p class="et">Rapport PDF</p><p class="ed">Générer un rapport PDF de l'inventaire.</p></div>
+                    <div><p class="et">Rapport PDF</p><p class="ed">Générer un rapport PDF de l\'inventaire.</p></div>
                 </button>
             </div>
         </div>
@@ -210,21 +183,21 @@
         <div id="s-admin" class="screen">
             <div class="ph">
                 <h1 class="pt">Administration</h1>
-                <p class="ps">Gérer les paramètres de l'application.</p>
+                <p class="ps">Gérer les paramètres de l\'application.</p>
             </div>
             <div class="alist">
                 <button class="ec" onclick="openAddScreen()">
                     <div class="eico" style="background:#dcfce7;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-plus"><path d="M16 16h2"/><path d="M18 14v4"/><path d="M7.5 7.5 12 12l-4.5 4.5L3 12l4.5-4.5Z"/><path d="M5 12H2"/><path d="M12 2v2"/><path d="M12 12v2"/><path d="M12 22v-2"/><path d="M17.5 16.5 22 12l-4.5-4.5L13 12l4.5 4.5Z"/></svg></div>
-                    <div><p class="et">Ajouter un Produit</p><p class="ed">Enregistrer un nouveau produit dans l'inventaire.</p></div>
+                    <div><p class="et">Ajouter un Produit</p><p class="ed">Enregistrer un nouveau produit dans l\'inventaire.</p></div>
                 </button>
                 <button class="ec" onclick="toggleDarkMode()">
-                    <div class="eico" style="background:#e0e7ff;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
+                    <div class="eico" style="background:#e0e7ff;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
                     <div><p class="et">Mode Sombre</p><p class="ed">Activer ou désactiver le thème sombre.</p></div>
                     <div id="dark-track" class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div>
                 </button>
                 <button class="ec" onclick="logout()">
-                    <div class="eico" style="background:#ffe4e6;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></div>
-                    <div><p class="et">Déconnexion</p><p class="ed">Se déconnecter de l'application.</p></div>
+                    <div class="eico" style="background:#ffe4e6;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></div>
+                    <div><p class="et">Déconnexion</p><p class="ed">Se déconnecter de l\'application.</p></div>
                 </button>
             </div>
         </div>
@@ -233,7 +206,7 @@
         <div id="s-about" class="screen">
             <div class="ph">
                 <h1 class="pt">À propos</h1>
-                <p class="ps">Informations sur l'application.</p>
+                <p class="ps">Informations sur l\'application.</p>
             </div>
             <div class="sc">
                 <p class="sl">Version</p>
@@ -305,6 +278,7 @@
 
     </div>
 
+    <!-- BARRE DE NAVIGATION (TABBAR) -->
     <div id="tabbar">
         <button class="menu-item" id="tb-dash" onclick="go(\'dash\')">
             <div class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></div>
@@ -367,6 +341,8 @@
     </div>
     <div id="menu-overlay" onclick="toggleMenu()"></div>
 
+    <!-- LIEN VERS TON CERVEAU (LE JAVASCRIPT) -->
     <script src="script.js"></script>
+
 </body>
 </html>
